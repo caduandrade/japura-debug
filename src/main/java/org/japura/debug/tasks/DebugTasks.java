@@ -1,7 +1,5 @@
 package org.japura.debug.tasks;
 
-import javax.swing.SwingUtilities;
-
 import org.japura.Application;
 import org.japura.controller.Context;
 import org.japura.controller.Controller;
@@ -11,9 +9,11 @@ import org.japura.message.Message;
 import org.japura.task.messages.notify.TaskEventMessage;
 import org.japura.task.messages.notify.TaskExecutionMessage;
 
+import javax.swing.SwingUtilities;
+
 /**
  * <P>
- * Copyright (C) 2011-2013 Carlos Eduardo Leite de Andrade
+ * Copyright (C) 2011-2015 Carlos Eduardo Leite de Andrade
  * <P>
  * This library is free software: you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,59 +35,46 @@ import org.japura.task.messages.notify.TaskExecutionMessage;
  * @author Carlos Eduardo Leite de Andrade
  */
 public class DebugTasks extends DefaultController<DebugTasksPanel> implements
-	Debug<DebugTasksPanel>{
-
-  private DebugTasksPanel component;
+  Debug<DebugTasksPanel> {
 
   public DebugTasks(Context context, Controller parentController) {
-	super(context, parentController);
-	Application.getTaskManager().setNotifyMessagesEnabled(true);
+    super(context, parentController);
+    Application.getTaskManager().setNotifyMessagesEnabled(true);
   }
 
   @Override
-  public DebugTasksPanel getComponent() {
-	if (component == null) {
-	  component = new DebugTasksPanel();
-	}
-	return component;
-  }
-
-  @Override
-  public boolean isComponentInstancied() {
-	if (component != null) {
-	  return true;
-	}
-	return false;
+  public DebugTasksPanel buildComponent() {
+    return new DebugTasksPanel();
   }
 
   @Override
   public String getTitle() {
-	return "Tasks";
+    return "Tasks";
   }
 
   @Override
   public void subscribe(Message message, Object publisher) {
-	super.subscribe(message, publisher);
+    super.subscribe(message, publisher);
 
-	if (message instanceof TaskEventMessage) {
-	  final TaskEventMessage tem = (TaskEventMessage) message;
-	  SwingUtilities.invokeLater(new Runnable() {
-		@Override
-		public void run() {
-		  getComponent().getEventPanel().addTaskDebugLog(tem.getTaskEvent());
-		}
-	  });
-	}
+    if (message instanceof TaskEventMessage) {
+      final TaskEventMessage tem = (TaskEventMessage) message;
+      SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          getComponent().getEventPanel().addTaskDebugLog(tem.getTaskEvent());
+        }
+      });
+    }
 
-	if (message instanceof TaskExecutionMessage) {
-	  final TaskExecutionMessage tem = (TaskExecutionMessage) message;
-	  SwingUtilities.invokeLater(new Runnable() {
-		@Override
-		public void run() {
-		  getComponent().getExecutionsPanel().getExecutionPanel().perform(tem);
-		}
-	  });
-	}
+    if (message instanceof TaskExecutionMessage) {
+      final TaskExecutionMessage tem = (TaskExecutionMessage) message;
+      SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          getComponent().getExecutionsPanel().getExecutionPanel().perform(tem);
+        }
+      });
+    }
   }
 
 }

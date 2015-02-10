@@ -6,32 +6,19 @@ import org.japura.controller.DefaultController;
 import org.japura.controller.annotations.ChildController;
 
 @ChildController
-public class ListViewPanelController extends DefaultController<ListViewPanel>{
-
-  private ListViewPanel component;
+public class ListViewPanelController extends DefaultController<ListViewPanel> {
 
   public ListViewPanelController(Context context, Controller parentController) {
-	super(context, parentController);
+    super(context, parentController);
   }
 
   @Override
-  public boolean isComponentInstancied() {
-	if (component != null) {
-	  return true;
-	}
-	return false;
-  }
-
-  @Override
-  public ListViewPanel getComponent() {
-	if (component == null) {
-	  component = new ListViewPanel();
-	}
-	return component;
+  public ListViewPanel buildComponent() {
+    return new ListViewPanel();
   }
 
   public void updateView() {
-	getComponent().update();
+    getComponent().update();
   }
 
 }

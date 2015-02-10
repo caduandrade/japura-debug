@@ -1,8 +1,5 @@
 package org.japura.debug;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import org.japura.controller.Context;
 import org.japura.controller.Controller;
 import org.japura.controller.DefaultController;
@@ -12,9 +9,12 @@ import org.japura.controller.annotations.Singleton;
 import org.japura.debug.controllers.DebugControllerManager;
 import org.japura.debug.tasks.DebugTasks;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 /**
  * <P>
- * Copyright (C) 2012-2013 Carlos Eduardo Leite de Andrade
+ * Copyright (C) 2012-2015 Carlos Eduardo Leite de Andrade
  * <P>
  * This library is free software: you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,43 +38,31 @@ import org.japura.debug.tasks.DebugTasks;
 @Singleton
 @ContextName(name = "DEBUG")
 @GroupName(name = "DebugWindow")
-public class DebugWindowController extends DefaultController<DebugWindow>{
-
-  private DebugWindow component;
+public class DebugWindowController extends DefaultController<DebugWindow> {
 
   public DebugWindowController(Context context, Controller parentController) {
-	super(context, parentController);
-	setControllerName("DebugWindow");
-	createChild(DebugControllerManager.class);
-	createChild(DebugTasks.class);
+    super(context, parentController);
+    setControllerName("DebugWindow");
+    createChild(DebugControllerManager.class);
+    createChild(DebugTasks.class);
   }
 
   @Override
-  protected DebugWindow getComponent() {
-	if (component == null) {
-	  component = new DebugWindow();
+  public DebugWindow buildComponent() {
+    DebugWindow component = new DebugWindow();
 
-	  component.addWindowListener(new WindowAdapter() {
-		@Override
-		public void windowClosing(WindowEvent e) {
-		  free();
-		}
-	  });
-	}
-	return component;
-  }
-
-  @Override
-  public boolean isComponentInstancied() {
-	if (component != null) {
-	  return true;
-	}
-	return false;
+    component.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        free();
+      }
+    });
+    return component;
   }
 
   public void show() {
-	getComponent().setVisible(true);
-	getComponent().updateTabTitles();
+    getComponent().setVisible(true);
+    getComponent().updateTabTitles();
   }
 
 }

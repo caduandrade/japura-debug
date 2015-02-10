@@ -6,32 +6,19 @@ import org.japura.controller.DefaultController;
 import org.japura.controller.annotations.ChildController;
 
 @ChildController
-public class TreeViewController extends DefaultController<TreeViewPanel>{
-
-  private TreeViewPanel component;
+public class TreeViewController extends DefaultController<TreeViewPanel> {
 
   public TreeViewController(Context context, Controller parentController) {
-	super(context, parentController);
+    super(context, parentController);
   }
 
   @Override
-  public boolean isComponentInstancied() {
-	if (component != null) {
-	  return true;
-	}
-	return false;
-  }
-
-  @Override
-  public TreeViewPanel getComponent() {
-	if (component == null) {
-	  component = new TreeViewPanel();
-	}
-	return component;
+  public TreeViewPanel buildComponent() {
+    return new TreeViewPanel();
   }
 
   public void updateView() {
-	getComponent().update();
+    getComponent().update();
   }
 
 }
